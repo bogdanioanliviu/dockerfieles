@@ -1,2 +1,2 @@
 FROM jboss/wildfly
- ADD app-bar-with-this-context.war /opt/jboss/wildfly/standalone/deployments/
+ ADD app-bar-with-this-context/target/app-bar-with-this-context.war /opt/jboss/wildfly/standalone/deployments/
