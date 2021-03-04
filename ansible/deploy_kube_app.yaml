@@ -22,7 +22,7 @@
 
     - name: create manifest template for kube deploy
       template:
-        src: "{{deploy_file}}"
+        src: "{{path_file}}/{{deploy_file}}"
         dest: "{{path_file}}/{{final_deploy}}"
       register: deploy_template
 
