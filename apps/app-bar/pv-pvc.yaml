@@ -1,0 +1,34 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-{{app_name}}
+  namespace: {{app_name}}
+  labels:
+    type: nfs
+    app: {{app_name}}
+spec:
+  storageClassName: managed-nfs-storage
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    path: /mnt/pool1/nfskube/{{app_name}}
+    server: truenas.houseofus.eu
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-{{app_name}}
+  namespace: {{app_name}}
+  labels:
+    app: {{app_name}}
+    type: nfs
+spec:
+  storageClassName: managed-nfs-storage
+  volumeName: pv-{{app_name}}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,0 +1,39 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{app_name}}
+  labels:
+    app: {{app_name}}
+  namespace: {{app_name}}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{app_name}}
+  template:
+    metadata:
+      labels:
+        app: {{app_name}}
+    spec:
+      containers:
+        - image: {{img_name}}
+          name: {{app_name}}
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: http
+            - containerPort: 9990
+              protocol: TCP
+              name: console
+          volumeMounts:
+            - mountPath: /opt/jboss/wildfly/standalone/log
+              name: {{app_name}}-data
+              subPath: log
+      restartPolicy: Always
+      volumes:
+        - name: {{app_name}}-data
+          persistentVolumeClaim:
+            claimName: pvc-{{app_name}}

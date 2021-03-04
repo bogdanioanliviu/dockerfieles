@@ -1,0 +1,20 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: svc-{{app_name}}
+  namespace: {{app_name}}
+  labels:
+    app: {{app_name}}
+spec:
+  selector:
+    app: {{app_name}}
+  ports:
+    - name: https
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: console
+      protocol: TCP
+      port: 9990
+      targetPort: 9990
+  type: NodePort
