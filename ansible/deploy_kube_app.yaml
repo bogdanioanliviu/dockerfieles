@@ -41,11 +41,11 @@
             dest: output.json
             line: '{{ deploy_status.stdout }}'
             create: yes
-      when: "{{ deployment_enabled }}"
+      when: "deployment_enabled"
 
     # Removals
     - block:
         - name: rollback kubernetes deployment
           shell: "kubectl -n {{ app_name }} rollout undo deployment.v1.apps/{{ app_name }}"
           register: roleback_kube_deployment
-      when: "not {{ deployment_enabled }}"
+      when: not deployment_enabled
