@@ -31,17 +31,21 @@
         - name: apply kubernetes deployment
           shell: "kubectl apply -f {{path_file}}/{{final_deploy}}"
           register: script_output
+        - name: 'Test new deploy'
+          shell: "kubectl -n {{ app_name }} rollout status deployment.v1.apps/{{ app_name }}"
+          register: deploy_status
+          failed_when: deploy_status.rc > 0
         - name: 'Output to json'
           local_action:
             module: lineinfile
             dest: output.json
-            line: '{{ script_output.stdout }}'
+            line: '{{ deploy_status.stdout }}'
             create: yes
       when: "deployment_enabled"
 
     # Removals
     - block:
         - name: remove kubernetes deployment
-          shell: "kubectl delete -f {{path_file}}/{{final_deploy}}"
-          register: remove_kube_deployment
+          shell: "kubectl -n {{ app_name }} rollout undo deployment.v1.apps/{{ app_name }}"
+          register: roleback_kube_deployment
       when: not deployment_enabled
