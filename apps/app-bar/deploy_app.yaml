@@ -20,6 +20,17 @@ spec:
       labels:
         app: {{app_name}}
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - {{app_name}}
+              topologyKey: "kubernetes.io/hostname"
+    spec:
       containers:
         - image: {{img_name}}
           name: {{app_name}}
