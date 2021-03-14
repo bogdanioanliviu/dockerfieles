@@ -30,7 +30,7 @@ spec:
                     values:
                       - {{app_name}}
               topologyKey: "kubernetes.io/hostname"
-    spec:
+    #spec:
       containers:
         - image: {{img_name}}
           name: {{app_name}}
